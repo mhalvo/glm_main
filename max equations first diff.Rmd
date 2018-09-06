@@ -1,0 +1,94 @@
+---
+title: "max equations first diff"
+author: "Max Halvorson"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+$$
+\begin{aligned}
+Y &= B_0 + B_1X_1 + B_2X_2 \\
+\\
+Y_0 &= E[Y|X_1 = 0] \\
+Y_1 &= E[Y|X_1 = 1] \\
+Y_2 &= E[Y|X_1 = 2] \\
+\\
+first\ differences\ are\ constant\\
+\\
+Y_1 - Y_0 &= (B_0+B_1+B_2X_2) - (B_0+B_2X_2) \\
+&= B_1 \\
+Y_2 - Y_1 &= (B_0+2B_1+B_2X_2) - (B_0+B_1+B_2X_2) \\
+&= B_1
+\end{aligned}
+$$
+
+Poisson Regression:
+
+$$
+\begin{aligned}\\
+E[Y|X] &= e^{B_0 + B_1X_1 + B_2X_2} \\
+\\
+Y_0 = E[Y|X_1=0] &= e^{B_0+B_2X_2} \\
+Y_1 = E[Y|X_1=1] &= e^{B_0+B_1+B_2X_2} \\
+Y_2 = E[Y|X_1=2] &= e^{B_0+2B_1+B_2X_2} \\
+\\
+first\ differences\ are\ not\ constant\\
+\\
+Y_1-Y_0&=e^{B_0+B_1+B_2X_2} - e^{B_0+B_2X_2} \\
+&=e^{B_0}e^{B_1}e^{B_2X_2} - e^{B_0}e^{B_2X_2} \\
+&=e^{B_0}e^{B_2X_2}(e^{B_1} - 1)\\
+
+\\
+Y_2-Y_1&=e^{B_0+2B_1+B_2X_2} - e^{B_0+B_1+B_2X_2} \\
+&=e^{B_0}e^{2B_1}e^{B_2X_2} - e^{B_0}e^{B_1}e^{B_2X_2} \\
+&=e^{B_0}e^{B_2X_2}(e^{2B_1} - e^{B_1})\\
+
+\end{aligned}
+$$
+
+Poisson regression assumes Y has poisson distribution. In this case, with $X_1$ changing from 0 to 1, the difference between Y's is dependent on $X_2$ as well even though there is no interaction term in the model.
+
+Logistic Regression:
+
+$$
+\begin{aligned}
+P(Y) &= \frac{e^{B_0+B_1X_1+B_2X_2}}{1+e^{B_0+B_1X_1+B_2X_2}}\\
+\\
+Y_0 = P(Y|X_1=0) &= \frac{e^{B_0+B_2X_2}}{1+e^{B_0+B_2X_2}} \\
+\\
+Y_1 = P(Y|X_1=1) &= \frac{e^{B_0+B_1+B_2X_2}}{1+e^{B_0+B_1+B_2X_2}} \\
+\\
+Y_2 = P(Y|X_1=2) &= \frac{e^{B_0+2B_1+B_2X_2}}{1+e^{B_0+2B_1+B_2X_2}} \\
+\\
+first\ differences\ are\ not\ constant\\
+Y_1-Y_0 &=\frac{e^{B_0+B_1+B_2X_2}}{1+e^{B_0+B_1+B_2X_2}} - \frac{e^{B_0+B_2X_2}}{1+e^{B_0+B_2X_2}} \\
+\\
+&=\frac{e^{B_0+B_1+B_2X_2}-e^{B_0+B_2X_2}}{(1+e^{B_0+B_1+B_2X_2})*(1+e^{B_0+B_2X_2})} \\
+\\
+Y_2-Y_1 &=\frac{e^{B_0+2B_1+B_2X_2}}{1+e^{B_0+2B_1+B_2X_2}} - \frac{e^{B_0+B_1+B_2X_2}}{1+e^{B_0+B_1+B_2X_2}} \\
+\\
+&=\frac{e^{B_0+2B_1+B_2X_2}-e^{B_0+B_1+B_2X_2}}{(1+e^{B_0+2B_1+B_2X_2})*(1+e^{B_0+B_1+B_2X_2})} \\
+
+\\
+
+
+\end{aligned}
+$$
+
+Odds Ratios
+
+$$
+\begin{aligned}
+The\ Odds\ Ratio\ (OR)\\
+\\
+log(\frac{P(Y)}{1-P(Y)}) &= B_0 + B_1X_1 + B_2X_2 \\
+OR:\ \ \ \  \frac{P(Y)}{1-P(Y)} &=e^{B_0 + B_1X_1 + B_2X_2} \\
+\frac{P(Y)}{1-P(Y)} &=e^{B_0}e^{B_1X_1}e^{B_2X_2} \\
+for\ a\ one\ unit\ increase\ in\ X_1,\ the\ odds\ increases\ by\ a\ factor\ of\ B_1 \\
+\end{aligned}
+$$
