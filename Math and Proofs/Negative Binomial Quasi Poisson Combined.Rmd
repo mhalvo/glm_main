@@ -1,0 +1,24 @@
+---
+title: "Negative Binomial Quasi Poisson Combined"
+author: "Xiaolin Cao"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Both negative binomial regression and quasi Poisson regression are used when the equality of variance and mean cannot be met. The quasi Poisson assumes that the variance is a linear function of mean. The negative binomial regression assumes that the variance is a quadratic function of mean. The expectation is still $E(Y)=\mu$ and $\mu=exp(x'\beta)$.
+
+$$
+\begin{aligned}
+E[Y_i|x_i, \tau_i] &= \mu_i\tau_i \\
+&= e^{x_i\beta +\epsilon_i}\\
+E[Y_i|x_i, \tau_i] &= e^{x_1\beta_1+x_2\beta_2+\epsilon_1+\epsilon_2}\\
+first\ diff\ &= e^{\beta_1+x_2\beta_2+\epsilon_1+\epsilon_2} - e^{x_2\beta_2+\epsilon_1+\epsilon_2}
+\end{aligned}
+$$
+
+The introduction of $\tau$ is to generalize the Poisson regression. 
