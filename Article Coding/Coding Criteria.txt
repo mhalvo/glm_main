@@ -1,0 +1,13 @@
+Relevant Analysis (Y/N)	
+Outcome Type
+Report Transformed OR/RR	
+Coefficient Figure	
+Interpret conditional effects	
+Notes
+
+Examined distributions
+Report Effect in Terms of Outcome of Interest
+Discussed centering
+Justification for Y transformation
+
+Missing data handling?
