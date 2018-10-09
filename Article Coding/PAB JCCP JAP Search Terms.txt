@@ -1,0 +1,1 @@
+TX ( count OR poisson OR binomial OR "zero-inflated" OR binary OR logistic OR probit ) AND SO ( journal of abnormal psychology OR (journal of consulting and clinical psychology) OR psychology of addictive behaviors ) AND PY 2007-2017
