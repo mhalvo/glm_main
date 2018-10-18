@@ -28,25 +28,48 @@
 \section{Introduction}
 The primary outcome in most studies of alcohol use behavior is the number of drinks in a time period. 
 
-Recent work has called for more widespread use of extensions of the general linear model which fit implicit assumptions about the data generation process. To facilitate this work, tutorials, software examples, and widely-available software packages make fitting these models more and more accessible (Atkins et al., 2007; Atkins \& Gallop, 2013).
+Recent work has called for more widespread use of extensions of the general linear model which fit implicit assumptions about the data generation process. 
+To facilitate this work, tutorials, software examples, and widely-available software packages make fitting these models more and more accessible (Atkins et al., 2007; Atkins \& Gallop, 2013).
 
-Despite widespread use of count and binary outcome models, very few (lit search results) researchers report model results in terms of the quantities of interest (QOI) they set out to understand. We found only two manuscripts out of 55 using binary or count outcomes in the Journal of Abnormal Psychology and Journal of Consulting and Clinical Psychology between 2007 and 2017 that followed these recommendations. (FOOTNOTE) Literature search was conducted using the same criteria as Norton (2004) and/or Brambor, Clark, \& Golder (2006). 
+Despite widespread use of count and binary outcome models, very few (lit search results) researchers report model results in terms of the quantities of interest (QOI) they set out to understand. 
+We found only two manuscripts out of 55 using binary or count outcomes in the Journal of Abnormal Psychology and Journal of Consulting and Clinical Psychology between 2007 and 2017 that followed these recommendations. (FOOTNOTE) 
+Literature search was conducted using the same criteria as Norton (2004) and/or Brambor, Clark, \& Golder (2006). 
 
-To make results easier to understand, methodologists recommend that GzLM parameters are best represented 1) in units that are most substantively meaningful and 2) at specific covariate values of interest. In count models, this entails reporting predicted counts, and in binary outcome models, this entails reporting predicted probabilities of an event occurring. We advocate for presenting quantities of interest directly, as fitted models are readily able to output direct predictions of these quantities. Thoughtful graphical and tabular presentation of data can facilitate intuition even when models are complicated, and present a richer source of information than single parameters. 
+To make results easier to understand, methodologists recommend that GzLM parameters are best represented 1) in units that are most substantively meaningful and 2) at specific covariate values of interest.
+In count models, this entails reporting predicted counts, and in binary outcome models, this entails reporting predicted probabilities of an event occurring. 
+We advocate for presenting quantities of interest directly, as fitted models are readily able to output direct predictions of these quantities. 
+Thoughtful graphical and tabular presentation of data can facilitate intuition even when models are complicated, and present a richer source of information than single parameters. 
 
 \section{Interpretation of Single Coefficients does not Characterize Generalized Linear Models}
-In examining predicted counts and probabilities, it becomes apparent that the single parameters reported in GzLMs do not map onto relationships between predictors and outcomes as readily as they do in ordinary least squares (OLS) regression. In fact, further analysis of these parameters reveals that even their transformed versions, such as odds ratios and rate ratios, a) do not represent constant first differences in QOI, and b) do not describe effects that are conditionally independent from one another, as in OLS regression. To demonstrate that these two properties hold for binary outcome and count models, we present a simulated-data example with two predictors for each model below. 
+In examining predicted counts and probabilities, it becomes apparent that the single parameters reported in GzLMs do not map onto relationships between predictors and outcomes as readily as they do in ordinary least squares (OLS) regression. 
+In fact, further analysis of these parameters reveals that even their transformed versions, such as odds ratios and rate ratios, a) do not represent constant first differences in QOI, and b) do not describe effects that are conditionally independent from one another, as in OLS regression. 
+To demonstrate that these two properties hold for binary outcome and count models, we present a simulated-data example with two predictors for each model below. 
 
-\section{Binary Outcome Models}
 
+\section{The Generalized Linear Model}
 %Stolen directly from Dale's paper for now
+Generalized linear models are those for which a link function is used to "connect" predictors to the outcome they predict. 
 The mathematical formulation for any GLM can be shown as:
 
 \begin{equation}
 g(\mathbb{E}[Y|\bm{X}]) = \bm{X} \beta ,
 \end{equation}
 
-where $g(\cdot)$ is the link function, $\bm{X}\beta$ are linear predictors, and $\mathbb{E}[Y|\bm{X}]$ is taken with respect to the probability distribution.
+where $g(\cdot)$ is the link function, $\bm{X}\beta$ are linear predictors, and $\mathbb{E}[Y|\bm{X}]$ is taken with respect to the probability distribution. In essence, the link function $g(\cdot)$ transforms the left side of the equation so that the relation between Y and X is not simply a direct relationship with slope $\beta$; rather, the entire left side of the equation varies with $\bm{X}\beta$.
+Herein lies some of the ambiguity associated with results of GzLMs.
+In this form, we lose sight of the idea that our QOI is the argument to the link function rather than the entire left side of the equation.
+
+In the case of linear reression, there is an implicit identity function serving as the link function.
+However, this link function can take many forms, all of which imply a particular data generative process underlying the data themselves.
+Link functions take the shape of a relationship between a predictor and an outcome (in linear regression, the slope of a line) and allow that relationship to take on whatever shape is defined by the link function.
+
+\section{Binary Outcome Models}
+
+Binary outcome models involve predicting the probability of an outcome occurring (vs. not occurring) based on some set of predictors. 
+The QOI researchers are most interested in is the predicted probability of an occurrence (e.g., of a disease) for individuals with a characteristic or set of characteristics.
+More specificallly, research questions tend to focus on the extent of a relation between predictors and the model's predicted probability.
+Due to software defaults and brevity in communication, scientists typically report effects of predictors in terms of log-transformed quantities.
+This practice not only leads to coefficients with unintuitive interpretations, but also implies an independence of covariates and a constancy of the reported effect that are unfortunately untrue.
 
 \subsection{The Logistic Model}
 
@@ -56,11 +79,16 @@ The logistic model is formulated as follows:
 \pi_i = \dfrac{\exp (X \bm{\beta})}{1 + \exp (X \bm{\beta})},
 \end{equation}
 
-First differences are not constant.
-
 \begin{figure}[h]
 \includegraphics[width=0.5\textwidth]{LogisticFirstDiff.png}
 \end{figure}
+
+EXPLAIN ODDS RATIOS
+
+Figure X depicts the relation between a continuous predictor $X_1$, a categorical predictor $X_2$, and the model-predicted probability of a binary outcome Y occurring. 
+The curve of each line makes it visually clear that a unit increase in $X_1$ does not lead to a constant increase in $P(Y)$.
+Similarly, the black lines between the curves for $X_2=0$ and $X_2=1$ are different lengths, demonstrating visually that the effect of $X_2$ (the amount that the blue line is above the red line) varies based on the level of $X_1$.
+Thus, even without interaction terms in a model, effects in logistic regression are not independent from one another. 
 
 \section{Count Models}
 
@@ -90,8 +118,6 @@ negative binomial formulation:
 \mathbb{E}[Y_i|x_i] = \lambda_i = \exp (x_i^T \bm{\beta}),
 \end{equation}
 where $\Gamma(\cdot)$ is the gamma function and $\theta$ is a constant shape parameter.
-
-This is a test.
 
 The negative binomial model is a generalization of the poisson model with an extra parameter, allowing for non-constant exposure. As such, the properties of non-constant first differences and non-independence of regression coefficients apply. 
 
