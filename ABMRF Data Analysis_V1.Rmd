@@ -1,0 +1,51 @@
+---
+title: "ABMRF Data Analysis"
+author: "Xiaolin Cao"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(results = 'hide')
+require(ggplot2)
+require(pscl)
+require(boot)
+require(leaps)
+require(car)
+```
+
+```{r chunklable, include=F}
+dat <- read.table("/Users/caoxiaolin/Downloads/ABMRF Data/ABMRF_Clean.txt", header = T)
+dat$gen <- as.factor(dat$gen)
+dat$DEMO19 <- as.factor(dat$DEMO19)
+hist(dat$M4ALC1)
+```
+
+1. zero inflated poisson model of M4ALC1 (past month drinking days)
+The R gives error "system is computationally singular: reciprocal condition number = 7.60816e-25", which means there isn't enough observations/dfs. 
+```{r, results='markup'}
+## check for collinearity 
+with(dat, pairs(cbind(purg, nurg, pre, per, ss, gen, DEMO19)))
+## By looking at the picture, we see there is collinearity between purg and nurg, pre and per.
+#library(car)
+m1_M4ALC1 <- zeroinfl(M4ALC1 ~ as.factor(DEMO19) + as.factor(gen) + purg + per + ss, data = dat) ## try without nurg and per
+#vif(m1_M4ALC1) #this also checks for collinearity
+summary(m1_M4ALC1)
+sub1 = regsubsets(M4ALC1 ~ as.factor(DEMO19) + as.factor(gen) + purg + nurg + pre + per + ss, data = dat, nvmax=5, nbest=1, method="exhaustive", really.big = T) # with all 7 variables 
+plot(sub1, scale="Cp")
+plot(sub1, scale="bic")
+plot(sub1, scale="adjr2")
+#m2_M4ALC1 <- zeroinfl(M4ALC1 ~ as.factor(DEMO19) + as.factor(gen) + nurg + per + ss, data = dat)
+```
+
+2. zero inflated poisson model of M4ALC6 (past month binge days)
+```{r, results='markup'}
+m2_M4ALC6 <- zeroinfl(M4ALC6 ~ as.factor(DEMO19) + as.factor(gen) + purg + pre + ss, data = dat)
+summary(m2_M4ALC6)
+sub2 = regsubsets(M4ALC6 ~ as.factor(DEMO19) + as.factor(gen) + purg + nurg + pre + per + ss, data = dat, nvmax=7, nbest=1, method="exhaustive", really.big = T) # with 7 vars
+plot(sub2, scale="Cp")
+plot(sub2, scale="bic")
+plot(sub2, scale="adjr2")
+```
