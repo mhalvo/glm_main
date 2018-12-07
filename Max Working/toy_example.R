@@ -15,6 +15,7 @@
 ################################
 ###
 
+rm(list=ls())
 library('tidyverse')
 library('MASS')
 library('pscl')
@@ -40,7 +41,7 @@ hist(dng$NSeasons)
 # LOGISTIC #
 ############
 
-Mclogi <- glm(AnySeasons ~ cHt + cWt + cVt + cTQ + cLA, data=dng, family=binomial(link="logit"))
+Mclogi <- glm(AnySeasons ~ cHt + cWt + cVt + cTQ + cLA, data=dngc, family=binomial(link="logit"))
 summary(Mclogi)
 Mlogi <- glm(AnySeasons ~ Height + Weight + Vertical + T.Q..Spring + L.A.T., data=dng, family=binomial(link="logit"))
 summary(Mlogi)
