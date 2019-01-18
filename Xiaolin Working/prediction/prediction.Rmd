@@ -1,0 +1,86 @@
+---
+title: "prediction"
+author: "Xiaolin Cao"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(MASS)
+library(pscl)
+```
+
+```{r}
+dat = read.table("/Users/caoxiaolin/Downloads/ABMRF Data/ABMRF_Clean.txt", header = T)
+dat$gen <- as.factor(dat$gen)
+dat$DEMO19 <- as.factor(dat$DEMO19)
+dat$purg_new <- dat$purg - 1
+m_zerofl <- zeroinfl(negpysum ~ as.factor(gen) + purg_new + pre | ss, data = dat)
+summary(m_zerofl)
+
+psych::describe(dat)
+
+hyp_M4ALC1_new_l = data.frame(gen = rep(1, 200),
+                              purg_new = seq(from=0,to=3, length.out = 200),
+                              pre = rep(3.46 - 1.5, 200),
+                              ss = rep(3.43, 200))
+hyp_M4ALC1_new_h = data.frame(gen = rep(1, 200),
+                              purg_new = seq(from=0, to=3, length.out = 200),
+                              pre = rep(3.46 + 1.5, 200),
+                              ss = rep(3.43, 200))
+fit_l = predict(m_zerofl, newdata = hyp_M4ALC1_new_l, type = "response")
+fit_h = predict(m_zerofl, newdata = hyp_M4ALC1_new_h, type = "response")
+
+hyp_l = data.frame(hyp_M4ALC1_new_l, P=fit_l)
+hyp_h = data.frame(hyp_M4ALC1_new_h, P=fit_h)
+hyp = rbind(hyp_l, hyp_h)
+hyp$HW = rep(1:2, each = 200)
+ggplot(data = hyp, aes(x=purg_new, y=P, color=HW)) +
+  geom_point() +
+  ylab("predicted negpysum") 
+
+ 
+```
+
+Gender as moderator
+```{r}
+m_gender = zeroinfl(negpysum ~ purg_new + as.factor(gen), data = dat)
+summary(m_gender)
+
+hyp_gen_1 = data.frame(gen = rep(1, 200),
+                              purg_new = seq(from=0,to=3, length.out = 200))
+hyp_gen_2 = data.frame(gen = rep(2, 200),
+                              purg_new = seq(from=0,to=3, length.out = 200))
+fit_l = predict(m_gender, newdata = hyp_gen_1, type = "response")
+fit_h = predict(m_gender, newdata = hyp_gen_2, type = "response")
+
+hyp_l = data.frame(hyp_gen_1, P=fit_l)
+hyp_h = data.frame(hyp_gen_2, P=fit_h)
+hyp = rbind(hyp_l, hyp_h)
+hyp$HW = rep(1:2, each = 200)
+ggplot(data = hyp, aes(x=purg_new, y=P, color=HW)) +
+  geom_point() +
+  ylab("predicted negpysum") 
+```
+
+QF as moderator
+```{r}
+m_QF = zeroinfl(negpysum ~ purg_new + as.numeric(QF), data = dat)
+summary(m_QF)
+
+hyp_QF_1 = data.frame(QF = rep(18.80 - 18.09, 200),
+                              purg_new = seq(from=0,to=3, length.out = 200))
+hyp_QF_2 = data.frame(QF = rep(18.80 + 18.09, 200),
+                              purg_new = seq(from=0,to=3, length.out = 200))
+fit_l = predict(m_QF, newdata = hyp_QF_1, type = "response")
+fit_h = predict(m_QF, newdata = hyp_QF_2, type = "response")
+
+hyp_l = data.frame(hyp_QF_1, P=fit_l)
+hyp_h = data.frame(hyp_QF_2, P=fit_h)
+hyp = rbind(hyp_l, hyp_h)
+hyp$HW = rep(1:2, each = 200)
+ggplot(data = hyp, aes(x=purg_new, y=P, color=HW)) +
+  geom_point() +
+  ylab("predicted negpysum") 
+```
