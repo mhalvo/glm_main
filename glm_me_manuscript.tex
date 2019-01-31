@@ -26,16 +26,22 @@
 \maketitle
 
 \section{Introduction}
-The odds of having drank any alcohol during the past weekend are 1.8 times higher (p < .001) amongst those who act rashly when experiencing positive emotion (i.e., low on positive urgency), controlling for the effect of gender.
+\textit{The odds of having drank any alcohol during the past weekend are 1.8 times higher (p < .001) amongst those who act rashly when experiencing positive emotion (i.e., high on positive urgency), controlling for the effect of gender.}
 
-What is the probability of drinking alcohol on a given day for a person who is low on positive urgency? How about for someone who is high on positive urgency? Is this effect stronger for men? Stronger for women? Or equivalent across men and women?
+Given the above information, we can say that there is a direct relation between positive urgency and drinking. What further research questions might we want to answer with the information provided? What is the probability of drinking alcohol on a given day for a person who is low on positive urgency? How about for someone who is high on positive urgency? Is this effect stronger for men? Stronger for women? Or equivalent across men and women?
 
 If these questions are difficult to answer, it's not because you've forgotten what you learned in the first couple years of graduate school - it's because this problem is unsolvable, given the information above. 
+When modelling outcomes that are binary (e.g., drinking or no drinking) or counts (e.g., number of drinks in an evening), communication and interpretation of model parameters beyond simple significance tests can become difficult. 
+Additional care needs to be given to communicating and interpreting model results. Whereas regression weights, or unstandardized beta values, express a straightforward relation between a predictor and an outcome (for a 1-unit increase in X, Y increases by beta units), binary and count model parameters have less ready interpretations. 
+In the current work, we sought to 1) highlight common misconceptions about binary and count model interpretation, 2) advocate for the use of quantities of scientific interest (QSI) in the presentation of results, and 3) provide guidelines for effective communication of binary and count model findings.
+
+
+\section{Generalized Linear Model}
 
 Recent work has called for more widespread use of extensions of the general linear model which fit implicit assumptions about the data generation process. 
 To facilitate this work, tutorials, software examples, and widely-available software packages make fitting these models more and more accessible (Atkins et al., 2007; Atkins \& Gallop, 2013).
 
-Despite widespread use of count and binary outcome models, very few (lit search results) researchers report model results in terms of the quantities of interest (QOI) they set out to understand. 
+Despite widespread use of count and binary outcome models, very few (lit search results) researchers report model results in terms of the quantities of scientific interest (QSI) they set out to understand. 
 We found only two manuscripts out of 55 using binary or count outcomes in the Journal of Abnormal Psychology and Journal of Consulting and Clinical Psychology between 2007 and 2017 that followed these recommendations. (FOOTNOTE) 
 Literature search was conducted using the same criteria as Norton (2004) and/or Brambor, Clark, \& Golder (2006). 
 
@@ -46,10 +52,32 @@ Thoughtful graphical and tabular presentation of data can facilitate intuition e
 
 \section{Interpretation of Single Coefficients does not Characterize Generalized Linear Models}
 In examining predicted counts and probabilities, it becomes apparent that the single parameters reported in GzLMs do not map onto relationships between predictors and outcomes as readily as they do in ordinary least squares (OLS) regression. 
-In fact, further analysis of these parameters reveals that even their transformed versions, such as odds ratios and rate ratios, a) do not represent constant first differences in QOI, and b) do not describe effects that are conditionally independent from one another, as in OLS regression. 
-To demonstrate that these two properties hold for binary outcome and count models, we present a simulated-data example with two predictors for each model below. 
+The reason for this complexity is that typically-reported transformed versions of parameters, such as odds ratios and rate ratios, a) do not represent constant first differences in QOI, and b) do not account for what we call "inherent interactivity" of effects, in which effects are not conditionally independent from one another. 
+Despite these properties, the overwhelming majority of papers report only these single transformed parameters (described in Table XX) when describing a relation of interest.
+
+\begin{table}[htp]
+\centering
+\addtolength{\tabcolsep}{3pt} % some more room between columns
+
+\caption{Group Example}
+
+\begin{tabular}{| c | c | c| c | c |}
+\toprule
+Model & Link Function & Quantity of Scientific Interest (QSI) & Typical parameter reported & Equation\\
+\midrule
+Logistic & Logit & Probability of event occurring & Odds Ratio () & Y ~ X \\
+Poisson & Exponential & Number of events occurring& Odds Ratio () & Y ~ X \\
+Logistic & Logit & Probability of event occurring & Odds Ratio () & Y ~ X \\
+\addlinespace
+\midrule[\heavyrulewidth]
+\end{tabular}
+
+\end{table}
 
 
+
+In this paper, we demonstrate that these two properties hold for binary outcome and count models via a simulated-data example with two predictors for each type of model.
+ 
 \section{The Generalized Linear Model}
 %Stolen directly from Dale's paper for now
 Generalized linear models are those for which a link function is used to describe the relationship between predictors and the outcome they predict, when the relationship is not well described by a straigh tline. 
