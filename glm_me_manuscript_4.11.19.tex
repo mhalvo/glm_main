@@ -1,0 +1,276 @@
+\documentclass[jou, apacite]{apa6}
+\usepackage{threeparttable}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{graphicx}
+\graphicspath{ {./Images/} }
+
+\raggedbottom
+
+\begin{document}
+\title{Evaluating Main Effects in the Generalized Linear Model}
+\shorttitle{Interpreting GLM Main Effects}
+
+\fiveauthors{Max A. Halvorson}{Xiaolin Cao}{Connor J. McCabe}{Dale S. Kim}{Kevin M. King}
+\fiveaffiliations{University of Washington}{University of Washington}{University of Washington}{University of California, Los Angeles}{University of Washington}
+
+\abstract{}
+
+\keywords{count models, logistic regression, generalized linear models, data visualization}
+
+\rightheader{Evaluating GLM Main Effects}
+\leftheader{Halvorson, Cao, McCabe, Kim, and King}
+
+\maketitle
+
+\section{Introduction}
+\textit{The odds of having drank any alcohol during the past weekend are 1.8 times higher (p < .001) amongst those who act rashly when experiencing positive emotion (i.e., high on positive urgency), controlling for the effect of gender.}
+
+Given the above information, we can say that there is a direct relation between positive urgency and drinking. What further research questions might we want to answer with the information provided? What is the probability of drinking alcohol on a given day for a person who is low on positive urgency? How about for someone who is high on positive urgency? Is this effect stronger for men? Stronger for women? Or equivalent across men and women?
+
+If these questions are difficult to answer, it's not because you've forgotten what you learned in the first couple years of graduate school - it's because this problem is unsolvable, given the information above. 
+When modelling outcomes that are binary (e.g., drinking or no drinking) or counts (e.g., number of drinks in an evening), communication and interpretation of model parameters beyond simple significance tests can become difficult. 
+Additional care needs to be given to communicating and interpreting model results. Whereas regression weights, or unstandardized beta values, express a straightforward relation between a predictor and an outcome (for a 1-unit increase in X, Y increases by beta units), binary and count model parameters have less ready interpretations. 
+In the current work, we sought to 1) highlight common misconceptions about binary and count model interpretation, 2) advocate for the use of quantities of scientific interest (QSI) in the presentation of results, and 3) provide guidelines for effective communication of binary and count model findings.
+
+
+\section{The Generalized Linear Model}
+
+Recent methodological papers have called for more widespread use of extensions of the general linear model which fit implicit assumptions about the data generation process (Atkins papers, Cohen et al. 2003, Cameron & Trivedi, 1998, Long, 1997). 
+This class of models is called generalized linear models (GzlMs).
+Put differently, GzLMs are a set of models whose assumptions fit a data generation process that matches statistical theory.
+If observed data represent presence or absence of an event, the underlying data generation process is something like a coin flip. 
+A logistic regression model is a type of GzLm whose underlying mathematics match this coin flipping situation.
+These models are advocated in contrast to simply applying OLS regression to data which violate assumptions of the model, or to applying a log-transformation to the outcome variable.
+To facilitate this work, tutorials, software examples, and widely-available software packages have made fitting these models more and more accessible (Atkins et al., 2007; Atkins \& Gallop, 2013).
+These models have several advantages: 1) they can approximate true relationships in the data more closely and with less bias (e.g., King, 1988); 2) they can avoid giving nonsensical predictions (e.g., probabilities over 1, negative counts); 3) they can be extended to more complex models, such as hurdle and zero-inflated models, to deal with data issues that algebraic transformation cannot address (for example, spreading out stacked zeros). 
+
+Despite widespread use of count and binary outcome models, reporting on these models tends to be minimal and inconsistent. 
+Authors tend to report single raw or transformed model coefficients, along with significance levels or confidene intervals (lit search results). 
+Few (lit search results) researchers report model results in terms of the quantities of scientific interest (QSI) they set out to understand. 
+We found only two manuscripts out of 55 using binary or count outcomes in the Journal of Abnormal Psychology and Journal of Consulting and Clinical Psychology between 2007 and 2017 that followed these recommendations. (FOOTNOTE) 
+Literature search was conducted using the same criteria as Norton (2004) and/or Brambor, Clark, \& Golder (2006). 
+
+An example results section might include a table of odds ratios, along with p-values for differences from a value of 1.
+This table would likely be accompanied by a phrase such as "subjects who experienced treatment A were 2.3 times more likely to respond to treatment than those who experienced treatment B." 
+This might lead one to assume that if 10\% of subjects who received treatment B were treatment responders, 23\% of subjects who received treatment A were treatment responders. 
+Unfortunately, this assumption would be inaccurate.
+Odds ratios do not reflect a proportional change in percentage; they in fact represent a proportional change in odds, as we will discuss in section XX below.
+
+To make results easier to understand, methodologists recommend that GzLM parameters are best represented 1) in units that are most substantively meaningful and 2) at specific covariate values of interest.
+In count models, this entails reporting predicted counts, and in binary outcome models, this entails reporting predicted probabilities of an event occurring. 
+We advocate for presenting QSIs directly, as fitted models are readily able to output direct predictions of these quantities. 
+Moreover, presenting results in terms of QSIs allows for comparison of results even across differently-specified models.
+
+Thoughtful graphical and tabular presentation of data can facilitate intuition even when models are complicated, and present a richer source of information than single parameters. 
+
+In our current work, we sought to provide two services to current researchers. First, we aimed to provide a consolidated tutorial with which applied researchers can refresh and deepen their understanding of binary and count models. Second, we aimed to state a case for presenting results in terms of QSIs. Third, we aimed to provide recommendations for reporting which could improve interpretation, comparability of results, and the development of a cumulative psychological science.
+
+\section{Interpretation of Single Coefficients does not Characterize Generalized Linear Models}
+In examining predicted counts and probabilities, it becomes apparent that the single parameters reported in GzLMs do not map onto relationships between predictors and outcomes as readily as they do in ordinary least squares (OLS) regression. 
+
+The reason for this complexity is that typically-reported transformed versions of parameters, such as odds ratios and rate ratios, a) do not represent constant first differences in QOI, and b) do not account for what we call "inherent interactivity" of effects, in which effects are not conditionally independent from one another. 
+Despite these properties, the overwhelming majority of papers report only these single transformed parameters (described in Table XX) when describing a relation of interest.
+
+In this paper, we demonstrate that these two properties hold for binary outcome and count models via a simulated-data example with two predictors for each type of model. Though we describe models in terms of mathematical specifications, we attempt to explain each concept in terms relevant to applied researchers.
+ 
+\section{The Generalized Linear Model}
+%Stolen directly from Dale's paper for now
+Generalized linear models are those for which a link function is used to describe the relationship between predictors and the outcome they predict, when the relationship is not well described by a straigh tline. 
+The mathematical formulation for any GLM can be shown as:
+
+\begin{equation}
+g(\mathbb{E}[Y|\bm{X}]) = \bm{X} \beta ,
+\end{equation}
+
+where $g(\cdot)$ is the link function, $\bm{X}\beta$ are linear predictors, and $\mathbb{E}[Y|\bm{X}]$ is taken with respect to the probability distribution. In essence, the link function $g(\cdot)$ transforms the left side of the equation so that the relation between Y and X is not simply a direct relationship with slope $\beta$; rather, the entire left side of the equation varies with $\bm{X}\beta$.
+
+*Need to describe latent variables and underlying logic*
+One assumption that follows from the equation described above is that predictors are somehow linearly related to the transformed outcome.	
+However, in this form, we lose sight of the idea that our QOI is the argument to the link function rather than the argument to the entire left side of the equation.
+
+In the case of linear reression, there is an implicit identity function serving as the link function.
+However, this link function can take many forms, all of which imply a particular data generative process underlying the data themselves.
+Link functions take the shape of a relationship between a predictor and an outcome (in linear regression, the slope of a line) and allow that relationship to take on whatever shape is defined by the link function.
+
+The link function we choose embodies our assumptions about the process that generates our data.
+In the case of OLS regression, we assume that our outcome is generated by a process with normally distributed errors.
+In the case of logistic regression, we assume that there is a latent variable representing underlying levels of some trait. 
+For example, a person's diagnostic status as depressed or non-depressed represents an underlying level of continuous depression. 
+Using a logit function, we can translate this latent level into a predicted probability of an outcome occurring.
+The link function allows predictor variables to influence this latent variable continuously, and describe the effect in terms of changes in probability of occurrence.
+\section{Binary Outcome Models}
+
+Binary outcome models involve predicting the probability of an outcome occurring (vs. not occurring) based on a set of predictors. 
+The QOI researchers tend to be most interested in is the predicted probability of an occurrence (e.g., of a disease) for individuals with a characteristic or set of characteristics.
+More specificallly, research questions tend to focus on how strongly a change in a predictor affects the probability of an outcome occurring.
+Motivated by parsimony and led by software defaults, scientists typically report effects of predictors in terms of a single odds ratio.
+This practice not only leads to coefficients with unintuitive interpretations, but also implies an independence of covariates and a constancy of the reported effect that are inconveniently untrue.
+
+\subsection{The Logistic Model}
+
+The logistic model is formulated as follows:
+
+\begin{equation} \label{log1}
+p = \dfrac{\exp (X \bm{\beta})}{1 + \exp (X \bm{\beta})},
+\end{equation}
+
+\begin{figure}[h]
+\includegraphics[width=0.5\textwidth]{LogisticFirstDiff.png}
+\end{figure}
+
+Since the logit link function is log-linear - that is, it relates to predicted probabilities through a log function - the extent of change in Y for a 1-unit increas in X is not linear. 
+An odds ratio describes the relation between the odds of an outcome occurring and the odds of an outcome not occurring, and is a reasonable proxy for the percentage increase in probability, at least when proportions are small.
+Unfortunately, an odds ratio provides no information regarding the magnitude of predicted probabilities.
+
+Figure X depicts the relation between a continuous predictor $X_1$, a categorical predictor $X_2$, and the model-predicted probability of a binary outcome Y occurring. 
+The curve of each line makes it visually clear that a unit increase in $X_1$ does not lead to a constant increase in $P(Y)$.
+Similarly, the black lines between the curves for $X_2=0$ and $X_2=1$ are different lengths, demonstrating visually that the effect of $X_2$ (the amount that the blue line is above the red line) varies based on the level of $X_1$.
+Thus, even without interaction terms in a model, effects in logistic regression are not independent from one another. 
+
+\section{Count Models}
+
+\subsection{The Poisson Model}
+
+\begin{equation} \label{pois1}
+\mathbb{P}(Y_i = y_i|x_i) = \dfrac{\lambda_i^{y_i}e^{-y_i}}{y_i!}, \quad\text{for } y_i = 0, 1, \dots
+\end{equation}
+\begin{equation} \label{pois2}
+\mathbb{E}[Y_i|x_i] = \lambda_i = \exp (x_i^T \bm{\beta})
+\end{equation}
+
+\begin{figure}[h]
+\includegraphics[width=0.5\textwidth]{PoissonFirstDiff.png}
+\end{figure}
+EXPLAIN INCIDENT RATE RATIOS
+
+\subsection{The Negative Binomial Model}
+
+negative binomial formulation:
+
+\begin{equation}
+\mathbb{P}(Y_i = y_i | x_i) = \dfrac{\Gamma(y_i + \theta)}{\Gamma(\theta)y_i!}
+  \cdot
+  \dfrac{\lambda_i^{y_i}\theta^{\theta}}{(\lambda_i + \theta)^{(y_i + \theta)}},
+\end{equation}
+\begin{equation}
+\mathbb{E}[Y_i|x_i] = \lambda_i = \exp (x_i^T \bm{\beta}),
+\end{equation}
+where $\Gamma(\cdot)$ is the gamma function and $\theta$ is a constant shape parameter.
+
+The negative binomial model is a generalization of the poisson model with an extra parameter, allowing for non-constant exposure. As such, the properties of non-constant first differences and non-independence of regression coefficients apply. 
+
+
+\subsection{The Hurdle Model}
+
+hurdle model formulation:
+
+\begin{equation}
+\mathbb{P}(Y_i = y_i|x_i) =
+  \begin{cases}
+    p_i, & \text{if } y_i = 0 \\
+    (1 - p_i)\mathbb{P}_c(Y_i = y_i|x_i), & \text{if } y_i = 1, 2, \dots
+  \end{cases}
+\end{equation}
+\begin{equation}
+p_i = \dfrac{\exp (x_i^T \bm{\beta}_{p})}{1 + \exp (x_i^T \bm{\beta}_{p})},
+\end{equation}
+\begin{equation}
+\mathbb{E}[Y_i|x_i] = (1 - p_i)\mathbb{E}_c[Y_i|x_i], % Placeholder - Verify
+\end{equation}
+where $p_i$ is once again assumed to be a Bernoulli parameter with logit link.
+
+The hurdle model is a piecewise model involving 1) a logistic regression portion which accounts for zeros and 2) a poisson (or other count) model to account for non-zero values. Hurdle models assume a two-step data generating processes: one that explains whether an observation was a 0 or a positive count (portion 1), and one that predicts that positive count (2). As these models are composed of the aforementioned models, the properties of non-constant first differences and non-independence of regression coefficients applies. 
+
+\subsection{The Zero-Inflated Model}
+
+zero-inflated model formulation:
+\begin{equation}
+\mathbb{P}(Y_i = y_i|x_i) =
+  \begin{cases}
+    p_i + (1 - p_i)\mathbb{P}_c(Y_i = 0|x_i), & \text{if } y_i = 0 \\
+    (1 - p_i) \mathbb{P}_c(Y_i = y_i|x_i), & \text{if } y_i = 1, 2, \dots
+  \end{cases}
+\end{equation}
+\begin{equation}
+ p_i = \dfrac{\exp (x_i^T \bm{\beta}_{p})}{1 + \exp (x_i^T \bm{\beta}_{p})},
+\end{equation}
+\begin{equation}
+\mathbb{E}[Y_i|x_i] = (1 - p_i)\mathbb{E}_c[Y_i|x_i], % Verify this.
+\end{equation}
+where $p_i$ refers to the probability of an excess zero and $\mathbb{E}_c[Y_i|x_i]$ is the expectation with respect to $\mathbb{P}_c(Y_i|x_i)$.
+
+The zero-inflated model is a piecewise mixture model involving the poisson model (or another count model), which accounts for two processes of generating zeros. Structural zeros, represented by the first term in part 1 of the piecewise function, occur when zeros are thought to be the result of a lack of exposure. Sampling zeros, represented by the second term in part 1 of the piecewise function, are zeros that were sampled from the full count distribution. Positive counts are modeled by part 2 of the piecewise function. As such, the properties of non-constant first differences and non-independence of regression coefficients applies. 
+
+\begin{equation} \label{zip1}
+\mathbb{P}(Y_i = y_i|x_i) =
+  \begin{cases}
+    p_i + (1 - p_i)e^{-y_i}, & \text{if } y_i = 0 \\
+    (1 - p_i) \dfrac{\lambda_i^{y_i}e^{-y_i}}{y_i!}, & \text{if } y_i = 1, 2, \dots
+  \end{cases}
+\end{equation}
+\begin{equation} \label{zip2}
+p_i = \dfrac{\exp (x_i^T \bm{\beta}_{p})}{1 + \exp (x_i^T \bm{\beta}_{p})},
+\end{equation}
+\begin{equation} \label{zip3}
+\lambda_i = \exp (x_i^T \bm{\beta}_{\lambda}),
+\end{equation}
+\begin{equation} \label{zip4}
+\mathbb{E}[Y_i|x_i] = (1 - p_i)\lambda_i,
+\end{equation}
+where $p_i$ refers to the probability of an excess zero as before.
+
+
+\section{}
+When presenting results, it is important to recall that the choice of covariate levels chosen as 0 values can influence the interpretation of results to the majority of readers, who likely do not have the available time or information to probe a model fully. 
+
+We propose that research producers should choose their covariate values thoughtfully. 
+
+In order to characterize an effect accurately, researchers may have to probe an effect at multiple covariate levels, even when no interactions are included in the model.
+
+For example, an interpretation of the above example might be written as follows: There was a main effect of positive urgency on negative alcohol consequences (OR = XX, SE = XX, p = XX). For a 21-year-old male, the predicted number of negative alcohol consequences was 3 for someone low in positive urgencty and 8 for someone high on positive urgency. In contrast, for a 21-year-old female, the predicted number of consequences for 5 for a low-urgency individual and 12 for a high-urgency individual.
+
+Make a comment about cumulative psychological science. This effort is in the direction of quantifying effect sizes, not just reporting p-values. Graphical methods are one means of giving more information about nonlinear models. Another means is to give additional interpretation in the text of results and discussion sections. Especially at the beginning of a discussion section, this type of information can be very useful for readers to contextualize findings. This is also helpful in providing more information and intuition about base rates. But it generally contributes 
+
+\section{Recommendations for Model Reporting: Tables and Graphics}
+\subsection{Binary Outcome Data}
+Table of first differences with covariate values made explicit
+
+Graphic of first differences for some X1 and X2 of interest	
+
+Real data example???
+
+Show graphs from InterActive? With uncertainty.
+
+\subsection{Count Data}
+Table of first differences with covariate values made explicit
+
+Graphic of first differences for some X1 and X2 of interest
+
+Real data example???
+
+Show graphs from InterActive? With uncertainty.
+
+
+\begin{table}[htp]
+\centering
+\addtolength{\tabcolsep}{3pt} % some more room between columns
+
+\caption{Group Example}
+
+\begin{tabular}{| c | c | c| c | c |}
+\toprule
+Model & Link Function & Quantity of Scientific Interest (QSI) & Typical parameter reported & Equation\\
+\midrule
+Logistic & Logit & Probability of event occurring & Odds Ratio () & Y ~ X \\
+Poisson & Exponential & Number of events occurring& Odds Ratio () & Y ~ X \\
+Logistic & Logit & Probability of event occurring & Odds Ratio () & Y ~ X \\
+\addlinespace
+\midrule[\heavyrulewidth]
+\end{tabular}
+
+\end{table}
+
+\end{document}
