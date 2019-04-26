@@ -5,6 +5,7 @@
 \usepackage{amssymb}
 \usepackage{bm}
 \usepackage{graphicx}
+\usepackage{tabularx,booktabs,ragged2e}
 \graphicspath{ {./Images/} }
 
 \raggedbottom
@@ -28,53 +29,59 @@
 \section{Introduction}
 \textit{The odds of having drank any alcohol during the past weekend are 1.8 times higher (p < .001) amongst those who act rashly when experiencing positive emotion (i.e., high on positive urgency), controlling for the effect of gender.}
 
-Given the above information, we can say that there is a direct relation between positive urgency and drinking. What further research questions might we want to answer with the information provided? What is the probability of drinking alcohol on a given day for a person who is low on positive urgency? How about for someone who is high on positive urgency? Is this effect stronger for men? Stronger for women? Or equivalent across men and women?
+Given the above information, we can say that there is a direct relation between positive urgency and drinking. However, there are further research questions we likely set out to answer with the analysis we conducted. What is the probability of drinking alcohol on a given day for a person who is low on positive urgency? How about for someone who is high on positive urgency? Is this effect stronger for men? Stronger for women? Or equivalent across men and women?
 
-If these questions are difficult to answer, it's not because you've forgotten what you learned in the first couple years of graduate school - it's because this problem is unsolvable, given the information above. 
+If these questions are difficult to answer, it's not because the analysis can't answer them, and it's not because you've forgotten what you learned in the first couple years of graduate school - it's because these questions are unanswerable, given the information presented above. 
 When modelling outcomes that are binary (e.g., drinking or no drinking) or counts (e.g., number of drinks in an evening), communication and interpretation of model parameters beyond simple significance tests can become difficult. 
-Additional care needs to be given to communicating and interpreting model results. Whereas regression weights, or unstandardized beta values, express a straightforward relation between a predictor and an outcome (for a 1-unit increase in X, Y increases by beta units), binary and count model parameters have less ready interpretations. 
+Whereas regression weights, or unstandardized beta values, express a straightforward relation between a predictor and an outcome (for a 1-unit increase in X, Y increases by beta units), binary and count model parameters have less ready interpretations. 
+Additional care needs to be given to communicating and interpreting model results.
 In the current work, we sought to 1) highlight common misconceptions about binary and count model interpretation, 2) advocate for the use of quantities of scientific interest (QSI) in the presentation of results, and 3) provide guidelines for effective communication of binary and count model findings.
 
-
-\section{Generalized Linear Model}
+\section{Binary and Count Outcomes Should be Modeled using Generalized Linear Models}
 
 Recent work has called for more widespread use of extensions of the general linear model which fit implicit assumptions about the data generation process. 
-To facilitate this work, tutorials, software examples, and widely-available software packages make fitting these models more and more accessible (Atkins et al., 2007; Atkins \& Gallop, 2013).
+To facilitate this work, tutorials, software examples, and widely-available software packages make fitting these models more and more accessible (Atkins et al., 2007; Atkins \& Gallop, 2013). 
 
-Despite widespread use of count and binary outcome models, very few (lit search results) researchers report model results in terms of the quantities of scientific interest (QSI) they set out to understand. 
-We found only two manuscripts out of 55 using binary or count outcomes in the Journal of Abnormal Psychology and Journal of Consulting and Clinical Psychology between 2007 and 2017 that followed these recommendations. (FOOTNOTE) 
+Despite widespread use of count and binary outcome models, reporting results of these models is typically done in a cursory fashion. 
+Most commonly, researchers provide odds ratios (ORs) or risk ratios (RRs).
+Almost no researchers in the field of psychology (lit search results) report model results in terms of the quantities of scientific interest (QSI) they set out to understand.
+Moreover, graphics of these effects are rarely found in the literature. 
+We found only two manuscripts out of 55 using binary or count outcomes in the Journal of Abnormal Psychology and Journal of Consulting and Clinical Psychology between 2007 and 2017 that reported XXXX. (FOOTNOTE) 
+
 Literature search was conducted using the same criteria as Norton (2004) and/or Brambor, Clark, \& Golder (2006). 
 
-To make results easier to understand, methodologists recommend that GzLM parameters are best represented 1) in units that are most substantively meaningful and 2) at specific covariate values of interest.
+To make results easier to understand, methodologists recommend that GzLM parameters are best represented 1) in units that are most substantively meaningful and 2) that covariate values are chosen thoughtfully and reported clearly.
 In count models, this entails reporting predicted counts, and in binary outcome models, this entails reporting predicted probabilities of an event occurring. 
 We advocate for presenting quantities of interest directly, as fitted models are readily able to output direct predictions of these quantities. 
-Thoughtful graphical and tabular presentation of data can facilitate intuition even when models are complicated, and present a richer source of information than single parameters. 
+Moreover, we strongly believe that graphical presentation of data can facilitate understanding in a way that is difficult or impossible for tables or single values to convey.
+Thoughtful graphical and tabular presentation of data can facilitate intuition even when models are complicated, and present a richer source of information than single parameters. (GIVE SOME CITES HERE)
+
+\section{The Case for Reporting Quantities of Scientific Interest}
+IS THERE COGNITIVE SCIENCE ON UNDERSTANDING STATISTICAL MODELS?
+EVIDENCE OF BIAS IN SCIENTIFIC INTERPRETATION (BRAIN PHOTOS)
+GARY KING AND CHRIS ADOLPH WORK
+DATA VISUALIZATION FROM CONNOR'S WORK
 
 \section{Interpretation of Single Coefficients does not Characterize Generalized Linear Models}
-In examining predicted counts and probabilities, it becomes apparent that the single parameters reported in GzLMs do not map onto relationships between predictors and outcomes as readily as they do in ordinary least squares (OLS) regression. 
-The reason for this complexity is that typically-reported transformed versions of parameters, such as odds ratios and rate ratios, a) do not represent constant first differences in QOI, and b) do not account for what we call "inherent interactivity" of effects, in which effects are not conditionally independent from one another. 
-Despite these properties, the overwhelming majority of papers report only these single transformed parameters (described in Table XX) when describing a relation of interest.
+In addition to the conceptual case for presenting QSIs, there is also a practical case to be made for not using transformed beta weights to interpret results from GzLMs.
+In examining predicted counts and probabilities, it becomes apparent that the single parameters reported in GzLMs do not map onto relations between predictors and outcomes as readily as they do in ordinary least squares (OLS) regression. 
+The reason for this complexity is that typically-reported transformed versions of parameters, such as odds ratios and rate ratios, A) do not represent constant first differences in QOI, and B) do not account for what we call "inherent interactivity" of effects. 
+By "inherent interactivity," we mean that main effects are not conditionally independent from one another. 
+Thus, even when interaction terms are not specified, the effect of predictor 1 is partially dependent on the level of predictor 2.
+In the sections that follow, we work through several common GzLMs with several goals: to make the case for presenting QSIs, to explicate properties A and B for each class of models, and to reiew and build intuition on teh models themselves..
 
-\begin{table}[htp]
-\centering
-\addtolength{\tabcolsep}{3pt} % some more room between columns
-
-\caption{Group Example}
-
-\begin{tabular}{| c | c | c| c | c |}
-\toprule
-Model & Link Function & Quantity of Scientific Interest (QSI) & Typical parameter reported & Equation\\
+\begin{table*}
+\begin{tabularx}{\textwidth}{c c c c c}
+\toprule 
+Model & Link Function & Quantity of Scientific Interest (QSI) & Typical parameter reported & Equation \\
 \midrule
 Logistic & Logit & Probability of event occurring & Odds Ratio () & Y ~ X \\
-Poisson & Exponential & Number of events occurring& Odds Ratio () & Y ~ X \\
+Poisson & Exponential & Number of events occurring & Odds Ratio () & Y ~ X \\s
 Logistic & Logit & Probability of event occurring & Odds Ratio () & Y ~ X \\
-\addlinespace
-\midrule[\heavyrulewidth]
-\end{tabular}
-
-\end{table}
-
-
+\bottomrule
+\end{tabularx}
+\caption{Parameter reporting}
+\end{table*}
 
 In this paper, we demonstrate that these two properties hold for binary outcome and count models via a simulated-data example with two predictors for each type of model.
  
@@ -118,10 +125,10 @@ The logistic model is formulated as follows:
 \end{equation}
 
 \begin{figure}[h]
-\includegraphics[width=0.5\textwidth]{LogisticFirstDiff.png}
+\includegraphics[width=0.45\textwidth]{LogisticFirstDiff.png}
 \end{figure}
 
-Since the logit link function is log-linear - that is, it relates to predicted probabilities through a log function - the extent of change in Y for a 1-unit increas in X is not linear. 
+Since the logit link function is log-linear - that is, predictors relate to predicted probabilities through a log function - the extent of change in Y for a 1-unit increase in X is not linear. 
 An odds ratio describes the relation between the odds of an outcome occurring and the odds of an outcome not occurring, and is a reasonable proxy for the percentage increase in probability, at least when proportions are small.
 Unfortunately, an odds ratio provides no information regarding the magnitude of predicted probabilities.
 
@@ -142,7 +149,7 @@ Thus, even without interaction terms in a model, effects in logistic regression 
 \end{equation}
 
 \begin{figure}[h]
-\includegraphics[width=0.5\textwidth]{PoissonFirstDiff.png}
+\includegraphics[width=0.45\textwidth]{PoissonFirstDiff.png}
 \end{figure}
 EXPLAIN INCIDENT RATE RATIOS
 
@@ -218,6 +225,7 @@ The zero-inflated model is a piecewise mixture model involving the poisson model
 \begin{equation} \label{zip3}
 \lambda_i = \exp (x_i^T \bm{\beta}_{\lambda}),
 \end{equation}
+
 \begin{equation} \label{zip4}
 \mathbb{E}[Y_i|x_i] = (1 - \pi_i)\lambda_i,
 \end{equation}
@@ -245,12 +253,44 @@ Real data example???
 
 Show graphs from InterActive? With uncertainty.
 
+
 \subsection{Count Data}
-Table of first differences with covariate values made explicit
+// Count Model \\
+We used data from a study of XXXX (ABMRF) to construct a zero-inflated Poisson model predicting the number of negative consequences in the past year (negpysum). By inspecting a histogram of the consequences variable, we can see that it has excessive zeros and the distribution is not overdispersed.  Therefore, we expected a zero-inflated Poisson model to describe the data well in this scenario. We used gender, positive urgency, premeditation and sensation seeking as predictor variables. In the process, we treated sensation seeking as the source of structural zeros and other predictors governed by Poisson distribution. The graph () shows that even in the absence of interaction terms, the first difference of predicted consequences is not constant across different genders. (Is this statement correct?) This variance comes from the inherent interactions featured by the model we chose.
 
-Graphic of first differences for some X1 and X2 of interest
+%\begin{figure}[h]
+%\includegraphics[width=0.4\textwidth]{negpysum_plot.png}
+%\end{figure}
 
-Real data example???
+%\begin{figure}[h]
+%\includegraphics[width=0.4\textwidth]{gender_as_moderator.png}
+%\end{figure}
 
-Show graphs from InterActive? With uncertainty.
+//Rate Ratio, Odds Ratio part \\
+//RR for Poisson, OR for zero-inflated \\
+(Most researchers do report the transformed RR and OR and some of them translate the RR/OR in English, but is this the focus of this paper?)
+In practice, the differentiation between the rate ratio for Poisson part and odds ration for zero-inflated part is not always illustrated. \\
+
+Risk Ratio: Risk ratio is the ratio of the probability of an outcome in an exposed group to the probability of an outcome in an unexposed group.\\
+\begin{equation}
+RR = \dfrac{\dfrac{Event}{Event + No-event \\in experimental group}}{\dfrac{Event}{Event + No-event in control group}}
+\end{equation}
+
+Odds Ratio: Odds ratio approaches to risk ratio if the probability of events is small. (EE and CE is smaller than EN and CN)\\
+\begin{equation}
+OR = \dfrac{\dfrac{Event}{No-event in experimental group}}{\dfrac{Event}{No-event in control group}}
+\end{equation}
+
+Rate Ratio: Rate ratio is closely related to risk ratio. It is computed by the incidence rate in an exposed group divided by the incidence rate in an unexposed group. \\
+\begin{equation}
+IRR = \dfrac{\dfrac{Event}{No-eventin  experimental group}}{\dfrac{Event}{No-event in control group}}
+\end{equation}
+// Binary Model \\
+(By binary model, do we mean the variable of interest is binary (yes/no) or the binary part of the zero-inflated model? If the latter, then it is included in the above content. If not, we need to find another variable of interest in the ABMRF dataset.)
+
+%s \begin{figure}[h]
+% \includegraphics[width=0.4\textwidth]{predicted_binary_outcome.png}
+% \end{figure}
+
+The binary model is constructed from simulated data. The graph shows that the first difference of predicted binary outcome is not consistent across different x1's. 
 \end{document}

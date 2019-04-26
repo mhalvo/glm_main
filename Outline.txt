@@ -1,0 +1,22 @@
+Modeling Binary & Count Outcomes Using the GLM
+
+The Case for Reporting Quantities of Scientific Interest
+
+Interpretation of Single Coefficients does not Characterize GLMs
+
+Binary Outcome Models
+	Logistic Regression
+
+Count Outcome Models
+	Poisson Regression
+	Negative Binomial Regression
+
+Hybrid Count Models
+	Zero-inflated Models
+	Hurdle Models
+
+Simulated Data Example: Binary Outcome
+
+Real Data Example: Hybrid Model
+
+Discussion
