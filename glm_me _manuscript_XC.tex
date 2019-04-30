@@ -26,16 +26,22 @@
 \maketitle
 
 \section{Introduction}
-The odds of having drank any alcohol during the past weekend are 1.8 times higher (p < .001) amongst those who act rashly when experiencing positive emotion (i.e., low on positive urgency), controlling for the effect of gender.
+\textit{The odds of having drank any alcohol during the past weekend are 1.8 times higher (p < .001) amongst those who act rashly when experiencing positive emotion (i.e., high on positive urgency), controlling for the effect of gender.}
 
-What is the probability of drinking alcohol on a given day for a person who is low on positive urgency? How about for someone who is high on positive urgency? Is this effect stronger for men? Stronger for women? Or equivalent across men and women?
+Given the above information, we can say that there is a direct relation between positive urgency and drinking. What further research questions might we want to answer with the information provided? What is the probability of drinking alcohol on a given day for a person who is low on positive urgency? How about for someone who is high on positive urgency? Is this effect stronger for men? Stronger for women? Or equivalent across men and women?
 
 If these questions are difficult to answer, it's not because you've forgotten what you learned in the first couple years of graduate school - it's because this problem is unsolvable, given the information above. 
+When modelling outcomes that are binary (e.g., drinking or no drinking) or counts (e.g., number of drinks in an evening), communication and interpretation of model parameters beyond simple significance tests can become difficult. 
+Additional care needs to be given to communicating and interpreting model results. Whereas regression weights, or unstandardized beta values, express a straightforward relation between a predictor and an outcome (for a 1-unit increase in X, Y increases by beta units), binary and count model parameters have less ready interpretations. 
+In the current work, we sought to 1) highlight common misconceptions about binary and count model interpretation, 2) advocate for the use of quantities of scientific interest (QSI) in the presentation of results, and 3) provide guidelines for effective communication of binary and count model findings.
+
+
+\section{Generalized Linear Model}
 
 Recent work has called for more widespread use of extensions of the general linear model which fit implicit assumptions about the data generation process. 
 To facilitate this work, tutorials, software examples, and widely-available software packages make fitting these models more and more accessible (Atkins et al., 2007; Atkins \& Gallop, 2013).
 
-Despite widespread use of count and binary outcome models, very few (lit search results) researchers report model results in terms of the quantities of interest (QOI) they set out to understand. 
+Despite widespread use of count and binary outcome models, very few (lit search results) researchers report model results in terms of the quantities of scientific interest (QSI) they set out to understand. 
 We found only two manuscripts out of 55 using binary or count outcomes in the Journal of Abnormal Psychology and Journal of Consulting and Clinical Psychology between 2007 and 2017 that followed these recommendations. (FOOTNOTE) 
 Literature search was conducted using the same criteria as Norton (2004) and/or Brambor, Clark, \& Golder (2006). 
 
@@ -46,10 +52,32 @@ Thoughtful graphical and tabular presentation of data can facilitate intuition e
 
 \section{Interpretation of Single Coefficients does not Characterize Generalized Linear Models}
 In examining predicted counts and probabilities, it becomes apparent that the single parameters reported in GzLMs do not map onto relationships between predictors and outcomes as readily as they do in ordinary least squares (OLS) regression. 
-In fact, further analysis of these parameters reveals that even their transformed versions, such as odds ratios and rate ratios, a) do not represent constant first differences in QOI, and b) do not describe effects that are conditionally independent from one another, as in OLS regression. 
-To demonstrate that these two properties hold for binary outcome and count models, we present a simulated-data example with two predictors for each model below. 
+The reason for this complexity is that typically-reported transformed versions of parameters, such as odds ratios and rate ratios, a) do not represent constant first differences in QOI, and b) do not account for what we call "inherent interactivity" of effects, in which effects are not conditionally independent from one another. 
+Despite these properties, the overwhelming majority of papers report only these single transformed parameters (described in Table XX) when describing a relation of interest.
+
+%\begin{table}[htp]
+%\centering
+%\addtolength{\tabcolsep}{3pt} % some more room between columns
+
+%\caption{Group Example}
+
+%\begin{tabular}{| c | c | c| c | c |}
+%\toprule
+%Model & Link Function & Quantity of Scientific Interest (QSI) & Typical parameter %reported & Equation\\
+%\midrule
+%Logistic & Logit & Probability of event occurring & Odds Ratio () & Y ~ X \\
+%Poisson & Exponential & Number of events occurring& Odds Ratio () & Y ~ X \\
+%Logistic & Logit & Probability of event occurring & Odds Ratio () & Y ~ X \\
+%\addlinespace
+%\midrule[\heavyrulewidth]
+%\end{tabular}
+
+%\end{table}
 
 
+
+In this paper, we demonstrate that these two properties hold for binary outcome and count models via a simulated-data example with two predictors for each type of model.
+ 
 \section{The Generalized Linear Model}
 %Stolen directly from Dale's paper for now
 Generalized linear models are those for which a link function is used to describe the relationship between predictors and the outcome they predict, when the relationship is not well described by a straigh tline. 
@@ -107,10 +135,10 @@ Thus, even without interaction terms in a model, effects in logistic regression 
 \subsection{The Poisson Model}
 
 \begin{equation} \label{pois1}
-\mathbb{P}(Y_i = y_i|x_i) = \dfrac{\lambda_i^{y_i}e^{-y_i}}{y_i!}, \quad\text{for } y_i = 0, 1, \dots
+\mathbb{P}(Y|X) = \dfrac{\lambda^{y}e^{-y}}{y!}, \quad\text{for } y = 0, 1, \dots
 \end{equation}
 \begin{equation} \label{pois2}
-\mathbb{E}[Y_i|x_i] = \lambda_i = \exp (x_i^T \bm{\beta})
+\mathbb{E}[Y|X] = \lambda = \exp (x \bm{\beta})
 \end{equation}
 
 %\begin{figure}[h]
@@ -123,12 +151,12 @@ EXPLAIN INCIDENT RATE RATIOS
 negative binomial formulation:
 
 \begin{equation}
-\mathbb{P}(Y_i = y_i | x_i) = \dfrac{\Gamma(y_i + \theta)}{\Gamma(\theta)y_i!}
+\mathbb{P}(Y|X) = \dfrac{\Gamma(y + \theta)}{\Gamma(\theta)y!}
   \cdot
-  \dfrac{\lambda_i^{y_i}\theta^{\theta}}{(\lambda_i + \theta)^{(y_i + \theta)}},
+  \dfrac{\lambda^{y}\theta^{\theta}}{(\lambda + \theta)^{(y + \theta)}},
 \end{equation}
 \begin{equation}
-\mathbb{E}[Y_i|x_i] = \lambda_i = \exp (x_i^T \bm{\beta}),
+\mathbb{E}[Y|X] = \lambda = \exp (x \bm{\beta}),
 \end{equation}
 where $\Gamma(\cdot)$ is the gamma function and $\theta$ is a constant shape parameter.
 
@@ -140,19 +168,19 @@ The negative binomial model is a generalization of the poisson model with an ext
 hurdle model formulation:
 
 \begin{equation}
-\mathbb{P}(Y_i = y_i|x_i) =
+\mathbb{P}(Y|X) =
   \begin{cases}
-    p_i, & \text{if } y_i = 0 \\
-    (1 - p_i)\mathbb{P}_c(Y_i = y_i|x_i), & \text{if } y_i = 1, 2, \dots
+    p, & \text{if } y = 0 \\
+    (1 - p)\mathbb{P}_c(Y = y|x), & \text{if } y = 1, 2, \dots
   \end{cases}
 \end{equation}
 \begin{equation}
-p_i = \dfrac{\exp (x_i^T \bm{\beta}_{p})}{1 + \exp (x_i^T \bm{\beta}_{p})},
+p = \dfrac{\exp (x \bm{\beta}_{p})}{1 + \exp (x \bm{\beta}_{p})},
 \end{equation}
 \begin{equation}
-\mathbb{E}[Y_i|x_i] = (1 - p_i)\mathbb{E}_c[Y_i|x_i], % Placeholder - Verify
+\mathbb{E}[Y|X] = (1 - p)\mathbb{E}_c[Y|X], % Placeholder - Verify
 \end{equation}
-where $p_i$ is once again assumed to be a Bernoulli parameter with logit link.
+where $p$ is once again assumed to be a Bernoulli parameter with logit link.
 
 The hurdle model is a piecewise model involving 1) a logistic regression portion which accounts for zeros and 2) a poisson (or other count) model to account for non-zero values. Hurdle models assume a two-step data generating processes: one that explains whether an observation was a 0 or a positive count (portion 1), and one that predicts that positive count (2). As these models are composed of the aforementioned models, the properties of non-constant first differences and non-independence of regression coefficients applies. 
 
@@ -160,40 +188,40 @@ The hurdle model is a piecewise model involving 1) a logistic regression portion
 
 zero-inflated model formulation:
 \begin{equation}
-\mathbb{P}(Y_i = y_i|x_i) =
+\mathbb{P}(Y|X) =
   \begin{cases}
-    p_i + (1 - p_i)\mathbb{P}_c(Y_i = 0|x_i), & \text{if } y_i = 0 \\
-    (1 - p_i) \mathbb{P}_c(Y_i = y_i|x_i), & \text{if } y_i = 1, 2, \dots
+    p + (1 - p)\mathbb{P}_c(Y = 0|x), & \text{if } y = 0 \\
+    (1 - p) \mathbb{P}_c(Y = y|x), & \text{if } y = 1, 2, \dots
   \end{cases}
 \end{equation}
 \begin{equation}
- p_i = \dfrac{\exp (x_i^T \bm{\beta}_{p})}{1 + \exp (x_i^T \bm{\beta}_{p})},
+p = \dfrac{\exp (x \bm{\beta}_{p})}{1 + \exp (x \bm{\beta}_{p})},
 \end{equation}
 \begin{equation}
-\mathbb{E}[Y_i|x_i] = (1 - p_i)\mathbb{E}_c[Y_i|x_i], % Verify this.
+\mathbb{E}[Y|X] = (1 - p)\mathbb{E}_c[Y|X], % Verify this.
 \end{equation}
-where $p_i$ refers to the probability of an excess zero and $\mathbb{E}_c[Y_i|x_i]$ is the expectation with respect to $\mathbb{P}_c(Y_i|x_i)$.
+where $p$ refers to the probability of an excess zero and $\mathbb{E}_c[Y|X]$ is the expectation with respect to $\mathbb{P}_c(Y|X)$.
 
 The zero-inflated model is a piecewise mixture model involving the poisson model (or another count model), which accounts for two processes of generating zeros. Structural zeros, represented by the first term in part 1 of the piecewise function, occur when zeros are thought to be the result of a lack of exposure. Sampling zeros, represented by the second term in part 1 of the piecewise function, are zeros that were sampled from the full count distribution. Positive counts are modeled by part 2 of the piecewise function. As such, the properties of non-constant first differences and non-independence of regression coefficients applies. 
 
 
 \begin{equation} \label{zip1}
-\mathbb{P}(Y_i = y_i|x_i) =
+\mathbb{P}(Y|X) =
   \begin{cases}
-    p_i + (1 - p_i)e^{-y_i}, & \text{if } y_i = 0 \\
-    (1 - p_i) \dfrac{\lambda_i^{y_i}e^{-y_i}}{y_i!}, & \text{if } y_i = 1, 2, \dots
+    p + (1 - p)e^{-y}, & \text{if } y = 0 \\
+    (1 - p) \dfrac{\lambda^{y}e^{-y}}{y!}, & \text{if } y = 1, 2, \dots
   \end{cases}
 \end{equation}
 \begin{equation} \label{zip2}
-p_i = \dfrac{\exp (x_i^T \bm{\beta}_{p})}{1 + \exp (x_i^T \bm{\beta}_{p})},
+p = \dfrac{\exp (x \bm{\beta}_{p})}{1 + \exp (x \bm{\beta}_{p})},
 \end{equation}
 \begin{equation} \label{zip3}
-\lambda_i = \exp (x_i^T \bm{\beta}_{\lambda}),
+\lambda = \exp (x \bm{\beta}_{\lambda}),
 \end{equation}
 \begin{equation} \label{zip4}
-\mathbb{E}[Y_i|x_i] = (1 - p_i)\lambda_i,
+\mathbb{E}[Y|X] = (1 - p)\lambda,
 \end{equation}
-where $p_i$ refers to the probability of an excess zero as before.
+where $p$ refers to the probability of an excess zero as before.
 
 
 \section{}
@@ -218,11 +246,66 @@ Real data example???
 Show graphs from InterActive? With uncertainty.
 
 \subsection{Count Data}
-Table of first differences with covariate values made explicit
+We used ABMRF data to construct a zero-inflated Poisson model against negative consequences counts in the past year (negpysum). By plotting out the negative consequences counts in the past year (negpysum), we can see that it has excessive zeros and the distribution is not overly dispersed.  Therefore, the zero-inflated Poisson regression fits in this scenario. Based on BIC criterion, we used gender, positive urgency, premeditation and sensation seeking as the predicting variables. In the process, we treated sensation seeking as the source of structural zeros and other predictors governed by Poisson distribution. Structural zeros come from subjects who typically are not at risk of behavior of interest. People who do not have drinking problems tend not to seek satisfaction from alcohol. The graph shows that in the absence of interaction terms, the first differences of predicted negative consequences are not constant across different genders. This variance comes from the inherent interactions featured by the model we chose.
 
-Graphic of first differences for some X1 and X2 of interest
+\begin{figure}[h]
+\includegraphics[width=0.4\textwidth]{negpysum_plot.png}
+\end{figure}
 
-Real data example???
+\begin{figure}[h]
+\includegraphics[width=0.4\textwidth]{gender_as_moderator.png}
+\end{figure}
 
-Show graphs from InterActive? With uncertainty.
+\subsection{Risk Ratio, Odds Ratio, and Rate Ratio}
+//RR for Poisson, OR for zero-inflated \\
+(Most researchers do report the transformed RR and OR and some of them translate the RR/OR in English, but is this the focus of this paper?)
+In practice, the differentiation between the rate ratio for Poisson part and odds ration for zero-inflated part is not always illustrated. \\
+
+\begin{center}
+\begin{tabular}{ |m{4em}|m{1cm}|m{1cm}| } 
+\hline
+	& Event & No-event \\
+\hline
+Experiment & EE & EN \\
+\hline
+Control & CE & CN \\
+\hline
+\end{tabular}
+\end{center}
+
+
+%\begin{tabu} to 0.8\textwidth { | X[l] | X[c] | X[r] | }
+%	\hline
+%		& Event & No-event \\
+%	\hline
+%		Experiment & EE & EN \\
+%	\hline
+%		Control & CE & CN \\
+%	\hline
+%\end{tabu}
+
+Risk Ratio: Risk ratio is the ratio of the probability of an outcome in an experiment group to the probability of an outcome in a control group.\\
+\begin{equation}
+RR = \dfrac{\dfrac{EE}{EE + EN }}{\dfrac{CE}{CE + CN}}
+\end{equation}
+
+Odds Ratio: Odds ratio approaches to risk ratio if the probability of events is small. (EE and CE is smaller than EN and CN respectively)\\
+\begin{equation}
+OR = \dfrac{\dfrac{EE}{EN}}{\dfrac{CE}{CN}}
+\end{equation}
+
+Rate Ratio: Rate ratio is closely related to risk ratio. It is computed by the incidence rate in an exposed group divided by the incidence rate in an unexposed group. \\
+\begin{equation}
+IRR = \dfrac{\dfrac{EE}{EN}}{\dfrac{CE}{CN}}
+\end{equation}
+
+\subsection{Binary Model}
+(By binary model, do we mean the variable of interest is binary (yes/no) or the binary part of the zero-inflated model? If the latter, then it is included in the above content. If not, we need to find another variable of interest in the ABMRF dataset.)
+
+\begin{figure}[h]
+\includegraphics[width=0.4\textwidth]{predicted_binary_outcome.png}
+\end{figure}
+
+The binary model is constructed from simulated data. X's are drawn from normal distribution and Y is from binomial distribution. The graph shows that the first difference of predicted binary outcome is not consistent across different x1's. 
 \end{document}
+
